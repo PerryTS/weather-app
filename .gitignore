@@ -1,0 +1,18 @@
+# Build artifacts
+*.o
+*.a
+target/
+dist/
+
+# Compiled binaries
+weather
+*.app/
+
+# macOS
+.DS_Store
+
+# Xcode (regenerated from project.yml via xcodegen)
+xcode/Weather.xcodeproj/
+
+# Internal docs
+perry-weather-app-konzept.md

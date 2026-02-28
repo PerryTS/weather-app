@@ -1,0 +1,5 @@
+[project]
+name = "weather"
+version = "1.0.0"
+description = "A native weather app — one codebase, six platforms, zero runtime"
+entry = "src/main.ts"
