@@ -47,7 +47,7 @@ widgetAddChild(wrapper, searchResultsContainer)
 widgetAddChild(wrapper, contentArea)
 
 // --- Always-visible search bar ---
-const searchField = buildSearchBar(searchBarContainer, onCitySelected, onQueryChange, textR, textG, textB, dimR, dimG, dimB)
+const searchField = buildSearchBar(searchBarContainer, onCitySelected, onQueryChange, function () { handleLocation() }, textR, textG, textB, dimR, dimG, dimB)
 
 const scroll = ScrollView()
 scrollviewSetChild(scroll, wrapper)
