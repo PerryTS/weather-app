@@ -4,7 +4,7 @@ import {
   textSetColor, textSetFontSize, textSetFontWeight,
   buttonSetBordered,
   widgetAddChild, widgetClearChildren,
-  widgetSetBackgroundColor, widgetSetCornerRadius,
+  widgetSetBackgroundColor, setCornerRadius,
 } from "perry/ui"
 import {
   getSearchNames, getSearchLats, getSearchLons, getSearchCountStr,
@@ -30,7 +30,7 @@ export function buildSearchBar(
 
   const row = HStackWithInsets(8, 10, 14, 10, 14)
   widgetSetBackgroundColor(row, 1.0, 1.0, 1.0, 0.15)
-  widgetSetCornerRadius(row, 12)
+  setCornerRadius(row, 12)
   widgetAddChild(row, field)
   widgetAddChild(row, locBtn)
 
@@ -66,7 +66,7 @@ export function buildSearchResults(
 
     const card = VStackWithInsets(8, 12, 8, 12, 4)
     widgetSetBackgroundColor(card, 1.0, 1.0, 1.0, 0.15)
-    widgetSetCornerRadius(card, 8)
+    setCornerRadius(card, 8)
 
     const btn = Button(name, function () {
       onCitySelected(name, lat, lon)

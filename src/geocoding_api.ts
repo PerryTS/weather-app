@@ -1,6 +1,5 @@
 // Open-Meteo Geocoding API client
 // City search — free, no key required
-import { fetchText } from "node-fetch"
 
 // Search results (parallel arrays)
 // (Perry limitation: export let/const don't generate cross-module symbols)
@@ -100,7 +99,7 @@ export function searchCity(query: string): void {
     + "&count=5"
     + "&language=en"
 
-  fetchText(url).then(function (text: string) {
+  fetch(url).then(function (response: any) { return response.text() }).then(function (text: string) {
     isSearching = false
     const data = JSON.parse(text)
     parseGeocodingResponse(data)
