@@ -5,8 +5,6 @@ import {
   textSetColor, textSetFontSize, textSetFontWeight,
   widgetAddChild,
   Canvas,
-  canvasClear, canvasBeginPath, canvasMoveTo, canvasLineTo,
-  canvasStroke, canvasFillGradient,
 } from "perry/ui"
 import { formatTemp, formatHour } from "./formatting"
 import { getHourlyTemps, getHourlyTimes } from "./weather_api"
@@ -51,13 +49,13 @@ export function buildTemperatureChart(container: any, chartWidth: number, textR:
   const canvas = Canvas(chartWidth, CHART_HEIGHT)
 
   // Clear and draw
-  canvasClear(canvas)
+  canvas.clearRect(0, 0, chartWidth, CHART_HEIGHT)
 
   const plotWidth = chartWidth - PADDING_LEFT - PADDING_RIGHT
   const plotHeight = CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM
 
   // Draw temperature line
-  canvasBeginPath(canvas)
+  canvas.beginPath()
   for (let i = 0; i < hourlyTemps.length; i++) {
     const x = PADDING_LEFT + (i / (hourlyTemps.length - 1)) * plotWidth
     const tempNorm = (hourlyTemps[i] - minTemp) / (maxTemp - minTemp)
@@ -65,33 +63,35 @@ export function buildTemperatureChart(container: any, chartWidth: number, textR:
     const y = PADDING_TOP + (1 - tempNorm) * plotHeight
 
     if (i === 0) {
-      canvasMoveTo(canvas, x, y)
+      canvas.moveTo(x, y)
     } else {
-      canvasLineTo(canvas, x, y)
+      canvas.lineTo(x, y)
     }
   }
   // Stroke the line (white with some transparency)
-  canvasStroke(canvas, 1.0, 1.0, 1.0, 0.9, 2.5)
+  canvas.setStrokeColor(1.0, 1.0, 1.0, 0.9)
+  canvas.setLineWidth(2.5)
+  canvas.stroke()
 
   // Draw gradient fill under the line
-  canvasBeginPath(canvas)
+  canvas.beginPath()
   for (let i = 0; i < hourlyTemps.length; i++) {
     const x = PADDING_LEFT + (i / (hourlyTemps.length - 1)) * plotWidth
     const tempNorm = (hourlyTemps[i] - minTemp) / (maxTemp - minTemp)
     const y = PADDING_TOP + (1 - tempNorm) * plotHeight
 
     if (i === 0) {
-      canvasMoveTo(canvas, x, y)
+      canvas.moveTo(x, y)
     } else {
-      canvasLineTo(canvas, x, y)
+      canvas.lineTo(x, y)
     }
   }
   // Close path along bottom edge
   const lastX = PADDING_LEFT + plotWidth
-  canvasLineTo(canvas, lastX, PADDING_TOP + plotHeight)
-  canvasLineTo(canvas, PADDING_LEFT, PADDING_TOP + plotHeight)
+  canvas.lineTo(lastX, PADDING_TOP + plotHeight)
+  canvas.lineTo(PADDING_LEFT, PADDING_TOP + plotHeight)
   // Fill with gradient (semi-transparent white to clear)
-  canvasFillGradient(canvas, 1.0, 1.0, 1.0, 0.3, 1.0, 1.0, 1.0, 0.0, 0)
+  canvas.fillGradient(1.0, 1.0, 1.0, 0.3, 1.0, 1.0, 1.0, 0.0, 0)
 
   widgetAddChild(container, canvas)
 

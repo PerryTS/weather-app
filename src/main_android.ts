@@ -10,7 +10,7 @@ import {
   appSetTimer,
   widgetSetBackgroundGradient,
 } from "perry/ui"
-import { requestLocation } from "perry/system"
+import { geolocationGetCurrent } from "perry/system"
 import {
   getCurrentWeatherCodeStr, getIsLoading, getHasData, getErrorMessage,
   fetchWeather, setOnDataReady,
@@ -263,12 +263,8 @@ function onCitySelected(name: string, lat: number, lon: number): void {
 // --- Action handlers ---
 function handleLocation(): void {
   console.log("handleLocation called")
-  requestLocation(function (lat: number, lon: number) {
+  geolocationGetCurrent(function (lat: number, lon: number, accuracy: number, timestamp: number) {
     console.log("location callback fired")
-    if (lat !== lat) {
-      // NaN check — location failed or denied
-      return
-    }
     cityName = "My Location"
     latitude = lat
     longitude = lon
@@ -277,6 +273,8 @@ function handleLocation(): void {
     clearSearch()
     fetchWeather(latitude, longitude)
     rebuild()
+  }, function (message: string) {
+    console.log("location failed: " + message)
   })
 }
 

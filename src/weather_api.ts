@@ -1,6 +1,5 @@
 // Open-Meteo Weather API client
 // Free API, no key required
-import { fetchText } from "node-fetch"
 
 // State — populated by fetchWeather, read by UI modules via getter functions
 // (Perry limitation: export let/const don't generate cross-module symbols)
@@ -140,7 +139,7 @@ export function fetchWeather(latitude: number, longitude: number): void {
     + "&timezone=auto"
     + "&forecast_days=5"
 
-  fetchText(url).then(function (text: string) {
+  fetch(url).then(function (response: any) { return response.text() }).then(function (text: string) {
     isLoading = false
     const data = JSON.parse(text)
     parseWeatherResponse(data)

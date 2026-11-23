@@ -9,9 +9,9 @@ import {
   addKeyboardShortcut,
   appSetTimer,
   widgetSetBackgroundGradient,
-  widgetSetBackgroundColor, widgetSetCornerRadius,
+  widgetSetBackgroundColor, setCornerRadius,
 } from "perry/ui"
-import { requestLocation } from "perry/system"
+import { geolocationGetCurrent } from "perry/system"
 import {
   getCurrentWeatherCodeStr, getCurrentTempStr, getCurrentHumidityStr,
   getCurrentWindSpeedStr, getFeelsLikeStr,
@@ -178,7 +178,7 @@ function rebuild(): void {
   // === Details Glass Card ===
   const detailsCard = HStackWithInsets(0, 0, 0, 0, 0)
   widgetSetBackgroundColor(detailsCard, 1.0, 1.0, 1.0, 0.15)
-  widgetSetCornerRadius(detailsCard, 16)
+  setCornerRadius(detailsCard, 16)
 
   const windBox = VStackWithInsets(4, 16, 20, 16, 20)
   const windLabel = Text("Wind")
@@ -211,14 +211,14 @@ function rebuild(): void {
   // === Chart Glass Card ===
   const chartCard = VStackWithInsets(8, 16, 14, 16, 14)
   widgetSetBackgroundColor(chartCard, 1.0, 1.0, 1.0, 0.15)
-  widgetSetCornerRadius(chartCard, 16)
+  setCornerRadius(chartCard, 16)
   buildTemperatureChart(chartCard, 330, textR, textG, textB, dimR, dimG, dimB, 140)
   widgetAddChild(contentArea, chartCard)
 
   // === Forecast Glass Card ===
   const forecastCard = VStackWithInsets(8, 14, 6, 14, 6)
   widgetSetBackgroundColor(forecastCard, 1.0, 1.0, 1.0, 0.15)
-  widgetSetCornerRadius(forecastCard, 16)
+  setCornerRadius(forecastCard, 16)
   const forecastHeader = Text("5-Day Forecast")
   textSetFontSize(forecastHeader, 16)
   textSetFontWeight(forecastHeader, 16, 0.6)
@@ -320,12 +320,8 @@ function onCitySelected(name: string, lat: number, lon: number): void {
 // --- Action handlers ---
 function handleLocation(): void {
   console.log("handleLocation called")
-  requestLocation(function (lat: number, lon: number) {
+  geolocationGetCurrent(function (lat: number, lon: number, accuracy: number, timestamp: number) {
     console.log("location callback fired")
-    if (lat !== lat) {
-      // NaN check — location failed or denied
-      return
-    }
     cityName = "My Location"
     latitude = lat
     longitude = lon
@@ -334,6 +330,8 @@ function handleLocation(): void {
     clearSearch()
     fetchWeather(latitude, longitude)
     rebuild()
+  }, function (message: string) {
+    console.log("location failed: " + message)
   })
 }
 
